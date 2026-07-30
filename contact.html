@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Contact — ONE WAVE LAB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f0f0e; --ink:#f4f2ec; --mut:rgba(244,242,236,.52); --line:rgba(255,255,255,.15);
+    --grad:linear-gradient(100deg,#ffffff,#9c9a90);
+    --serif:"Noto Serif SC",Georgia,serif;
+    --sans:"Inter","Helvetica Neue","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  }
+  *{margin:0;box-sizing:border-box}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:rgba(255,255,255,.2)}
+
+  /* 顶栏 */
+  .topbar{position:sticky;top:0;z-index:40;height:66px;display:flex;align-items:center;
+    justify-content:space-between;padding:0 40px;
+    background:rgba(15,15,14,.82);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:500;letter-spacing:.22em;font-size:14px}
+  .navlinks{display:flex;align-items:center;gap:28px}
+  .navlink{font-size:12px;letter-spacing:.14em;color:var(--mut);transition:color .25s}
+  .navlink:hover{color:var(--ink)}
+  .navlink.active{color:var(--ink)}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 40px}
+
+  /* 头部 */
+  .chero{padding:96px 0 28px}
+  .chero .kicker{font-size:11px;letter-spacing:.34em;color:var(--mut);margin-bottom:22px}
+  .chero h1{font-family:var(--serif);font-weight:500;
+    font-size:clamp(34px,5.4vw,68px);line-height:1.05;letter-spacing:-.012em}
+  .chero h1 em{font-style:normal;background:var(--grad);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .chero .lead{margin-top:26px;max-width:560px;font-size:15px;line-height:1.7;color:var(--mut)}
+
+  /* 信息栅格 */
+  .info{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+    background:var(--line);border:1px solid var(--line);margin-top:44px}
+  .info .cell{background:var(--bg);padding:28px 26px;min-height:140px}
+  .info .lab{font-size:11px;letter-spacing:.18em;color:var(--mut);text-transform:uppercase}
+  .info .val{font-family:var(--serif);font-weight:500;font-size:21px;margin-top:16px;line-height:1.4}
+  .info .val a:hover{text-decoration:underline}
+
+  /* 表单 */
+  .form-sec{margin-top:64px;padding-top:44px;border-top:1px solid var(--line)}
+  .form-sec h2{font-family:var(--serif);font-weight:500;font-size:clamp(22px,3vw,34px)}
+  .form-sec p.sub{margin-top:12px;color:var(--mut);font-size:14px;margin-bottom:30px}
+  form{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .field{display:flex;flex-direction:column}
+  .field.full{grid-column:1 / -1}
+  label{font-size:11px;letter-spacing:.14em;color:var(--mut);margin-bottom:9px;text-transform:uppercase}
+  input,textarea{background:transparent;border:1px solid var(--line);color:var(--ink);
+    font-family:var(--sans);font-size:15px;padding:14px 16px;border-radius:2px;outline:none;
+    transition:border-color .25s}
+  input:focus,textarea:focus{border-color:var(--ink)}
+  textarea{resize:vertical;min-height:130px}
+  ::placeholder{color:rgba(244,242,236,.34)}
+  .submit{justify-self:start;margin-top:6px;grid-column:1 / -1;
+    background:var(--ink);color:var(--bg);border:none;cursor:pointer;
+    font-family:var(--sans);font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    padding:15px 40px;border-radius:2px;transition:opacity .25s}
+  .submit:hover{opacity:.86}
+
+  /* 页脚 */
+  .foot{border-top:1px solid var(--line);margin-top:80px;padding:50px 0 70px;
+    display:flex;flex-wrap:wrap;gap:18px;align-items:baseline;justify-content:space-between}
+  .foot .cta{font-family:var(--serif);font-weight:500;font-size:clamp(22px,3vw,34px)}
+  .foot .links{display:flex;gap:24px;font-size:12px;letter-spacing:.12em;color:var(--mut)}
+  .foot .links a:hover{color:var(--ink)}
+
+  @media(max-width:760px){
+    .topbar,.wrap{padding-left:18px;padding-right:18px}
+    .chero{padding:58px 0 20px}
+    .info{grid-template-columns:1fr}
+    form{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="logo" href="index.html">ONE WAVE LAB</a>
+    <nav class="navlinks">
+      <a class="navlink" href="home.html">Work</a>
+      <a class="navlink active" href="contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <div class="wrap">
+    <header class="chero">
+      <div class="kicker">GET IN TOUCH — 联系我们</div>
+      <h1>让我们一起<br/><em>创造点什么</em></h1>
+      <p class="lead">无论是品牌从 0 到 1，还是一次视觉焕新，都欢迎聊聊。填写下方信息，或直接邮件联系我们。</p>
+    </header>
+
+    <section class="info">
+      <div class="cell">
+        <div class="lab">Email</div>
+        <div class="val"><a href="mailto:1319123656@qq.com">1319123656@qq.com</a></div>
+      </div>
+      <div class="cell">
+        <div class="lab">Studio</div>
+        <div class="val">南京 · 合肥</div>
+      </div>
+      <div class="cell">
+        <div class="lab">Services</div>
+        <div class="val">品牌咨询 · 品牌设计 · 空间设计</div>
+      </div>
+    </section>
+
+    <section class="form-sec">
+      <h2>给我们留言</h2>
+      <p class="sub">提交后将调用你的邮件客户端，直接发送到 1319123656@qq.com</p>
+      <form id="cform">
+        <div class="field">
+          <label for="nm">称呼 Name</label>
+          <input id="nm" name="nm" type="text" placeholder="您的称呼" required />
+        </div>
+        <div class="field">
+          <label for="em">邮箱 Email</label>
+          <input id="em" name="em" type="email" placeholder="您的邮箱" required />
+        </div>
+        <div class="field full">
+          <label for="ms">项目简述 Message</label>
+          <textarea id="ms" name="ms" placeholder="简单介绍一下您的项目 / 需求 / 预算区间" required></textarea>
+        </div>
+        <button class="submit" type="submit">发送邮件 →</button>
+      </form>
+    </section>
+
+    <footer class="foot">
+      <div class="cta">ONE WAVE LAB</div>
+      <div class="links">
+        <a href="mailto:1319123656@qq.com">1319123656@qq.com</a>
+        <a href="index.html">首页</a>
+        <a href="home.html">Work</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const form = document.getElementById('cform');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const nm = encodeURIComponent(document.getElementById('nm').value.trim());
+      const em = encodeURIComponent(document.getElementById('em').value.trim());
+      const ms = encodeURIComponent(document.getElementById('ms').value.trim());
+      const subject = encodeURIComponent('来自官网的咨询 — ' + nm);
+      const body = encodeURIComponent('称呼：' + nm + '\n邮箱：' + em + '\n\n' + ms);
+      location.href = 'mailto:1319123656@qq.com?subject=' + subject + '&body=' + body;
+    });
+  </script>
+</body>
+</html>

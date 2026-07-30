@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ONE WAVE LAB — 玩味·视觉设计工作室</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf9f6; --ink:#111110; --mut:#8a8882;
+    --line:rgba(17,17,16,.14);            /* 细分隔线 */
+    --line2:rgba(17,17,16,.26);           /* 明显分隔线（作品网格用） */
+    --grad:linear-gradient(100deg,#111110,#3a3a38);
+    --serif:"Noto Serif SC",Georgia,serif;
+    --sans:"Inter","Helvetica Neue","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  }
+  *{margin:0;box-sizing:border-box}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:rgba(17,17,16,.12)}
+
+  /* 顶栏 */
+  .topbar{position:sticky;top:0;z-index:40;height:66px;display:flex;align-items:center;
+    justify-content:space-between;padding:0 40px;
+    background:rgba(250,249,246,.82);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:500;letter-spacing:.22em;font-size:14px}
+  .mk{width:13px;height:13px;background:var(--ink);display:inline-block}
+  .navlink{font-size:12px;letter-spacing:.14em;color:var(--mut);transition:color .25s}
+  .navlink:hover{color:var(--ink)}
+
+  .wrap{max-width:1320px;margin:0 auto;padding:0 40px}
+
+  /* 头部 */
+  .hero{padding:84px 0 30px}
+  .hero .rule{height:1px;background:var(--line);margin-bottom:30px}
+  .hero .kicker{font-size:11px;letter-spacing:.34em;color:var(--mut);margin-bottom:22px}
+  .hero h1{font-family:var(--serif);font-weight:500;
+    font-size:clamp(34px,5.6vw,70px);line-height:1.02;letter-spacing:-.012em}
+  .hero h1 em{font-style:normal;background:var(--grad);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-meta{display:flex;flex-wrap:wrap;margin-top:30px;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .hero-meta span{flex:1;min-width:140px;padding:16px 0;font-size:11px;letter-spacing:.16em;
+    color:var(--mut);text-transform:uppercase}
+  .hero-meta span + span{border-left:1px solid var(--line);padding-left:22px}
+
+  /* 筛选 */
+  .filters{display:flex;flex-wrap:wrap;gap:26px;padding:30px 0 26px}
+  .filters .f{background:none;border:none;cursor:pointer;font:inherit;color:var(--mut);
+    font-size:12px;letter-spacing:.14em;padding:0 0 6px;position:relative;transition:color .25s}
+  .filters .f::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+    background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+  .filters .f:hover{color:var(--ink)}
+  .filters .f.active{color:var(--ink)}
+  .filters .f.active::after{transform:scaleX(1)}
+
+  /* 区块标签 */
+  .sect-label{display:flex;justify-content:space-between;align-items:baseline;
+    padding:6px 0 16px;font-size:11px;letter-spacing:.2em;color:var(--mut)}
+
+  /* 作品网格（明显分隔线，可点击） */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:26px;background:var(--bg);border:none}
+  .cell{position:relative;background:var(--bg);display:flex;flex-direction:column;
+    overflow:hidden;transition:background .3s}
+  .cell:hover{background:#fff}
+  .cell .thumb{aspect-ratio:4/3;width:100%;position:relative;
+    transition:transform .7s cubic-bezier(.2,.7,.2,1);transform-origin:center}
+  .cell:hover .thumb{transform:scale(1.04)}
+  /* 海报类：竖版 2:3，与品牌横版缩略图区分 */
+  .cell[data-cat="poster"] .thumb{aspect-ratio:2/3}
+  .cell .view{position:absolute;left:18px;bottom:16px;font-size:11px;letter-spacing:.16em;
+    color:#fff;mix-blend-mode:difference;opacity:0;transform:translateY(8px);transition:.35s}
+  .cell:hover .view{opacity:1;transform:translateY(0)}
+  .cell .body{padding:18px 20px 22px;display:flex;align-items:flex-start;
+    justify-content:space-between;gap:16px;border-top:1px solid var(--line)}
+  .cell .wt{font-family:var(--serif);font-weight:500;font-size:19px;line-height:1.22}
+  .cell .meta{display:flex;gap:12px;font-size:11px;letter-spacing:.1em;color:var(--mut);
+    white-space:nowrap;padding-top:5px}
+  .cell .meta .cat{color:var(--ink)}
+
+
+  /* 页脚 */
+  .foot{border-top:1px solid var(--line);margin-top:1px;padding:60px 0 80px;
+    display:flex;flex-wrap:wrap;gap:18px;align-items:baseline;justify-content:flex-end}
+  .foot .cta{font-family:var(--serif);font-weight:500;font-size:clamp(24px,3.4vw,40px)}
+  .foot .links{display:flex;gap:24px;font-size:12px;letter-spacing:.12em;color:var(--mut)}
+  .foot .links a:hover{color:var(--ink)}
+
+  @media(max-width:640px){
+    .topbar,.wrap{padding-left:18px;padding-right:18px}
+    .hero{padding:52px 0 24px}
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="logo" href="index.html">ONE WAVE LAB</a>
+    <a class="navlink" href="index.html">Index</a>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <div class="rule"></div>
+      <h1>Less is More</h1>
+      <div class="hero-meta">
+        <span>2020 - 2026</span>
+        <span>南京 · 合肥</span>
+        <span>品牌咨询 · 品牌设计 · 空间设计</span>
+      </div>
+    </header>
+
+    <nav class="filters" id="filters">
+      <button class="f active" data-cat="all">全部</button>
+      <button class="f" data-cat="brand">品牌</button>
+      <button class="f" data-cat="pack">包装</button>
+      <button class="f" data-cat="type">字体</button>
+      <button class="f" data-cat="poster">海报</button>
+    </nav>
+
+    <div class="sect-label"><span>WORKS — 点击查看案例</span></div>
+    <main class="grid" id="grid"></main>
+
+    <footer class="foot">
+      <div class="links">
+        <a href="mailto:1319123656@qq.com">1319123656@qq.com</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="works.js"></script>
+  <script>
+    const grid = document.getElementById('grid');
+
+    works.forEach((w,i)=>{
+      const a = document.createElement('a');
+      a.className = 'cell';
+      a.href = 'project.html?id=' + w.id;
+      a.draggable = false;
+      a.dataset.cat = w.cat;
+      const inner = '<div class="thumb"><img src="'+w.img+'" style="width:100%;height:100%;object-fit:cover" alt="'+w.t+'"><span class="view">查看项目 →</span></div>';
+      a.innerHTML = inner +
+        '<div class="body"><div class="left">'+
+          '<h3 class="wt">'+ w.t +'</h3></div>'+
+        '<div class="meta"><span class="cat">'+ catName[w.cat] +'</span></div></div>';
+      grid.appendChild(a);
+    });
+
+    // 分类筛选
+    const filters = document.getElementById('filters');
+    filters.addEventListener('click', e=>{
+      const b = e.target.closest('.f'); if(!b) return;
+      filters.querySelectorAll('.f').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      const c = b.dataset.cat;
+      grid.querySelectorAll('.cell').forEach(cell=>{
+        const show = (c==='all' || cell.dataset.cat===c);
+        cell.style.display = show ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

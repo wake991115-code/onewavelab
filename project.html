@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>项目详情 — ONE WAVE LAB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#faf9f6; --ink:#111110; --muted:#8a8882;
+    --line:rgba(17,17,16,.14); --line-strong:rgba(17,17,16,.9);
+    --grad:#111110; --ease:cubic-bezier(.22,.61,.36,1);
+    --serif:"Noto Serif SC",Georgia,serif;
+    --sans:"Inter","Helvetica Neue","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+  ::selection{background:rgba(17,17,16,.12)}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 32px}
+
+  /* 顶栏 */
+  header{position:sticky;top:0;z-index:50;background:rgba(250,249,246,.86);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-weight:700;letter-spacing:.02em;font-size:16px;display:flex;align-items:center}
+  .back{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+  .back:hover{color:var(--ink)}
+
+  /* 图片区：单张纵向排列 */
+  .feed{display:flex;flex-direction:column;gap:18px;margin:26px 0 10px}
+  @media(max-width:760px){ .wrap{padding:0 20px} }
+  .tile{width:100%;margin:0;aspect-ratio:16/9;overflow:hidden;
+    background:var(--line);position:relative}
+  .tile img{width:100%;height:100%;object-fit:cover;display:block;
+    transition:transform .6s var(--ease)}
+  .tile:hover img{transform:scale(1.03)}
+  /* 海报类：竖版 2:3，居中限宽，不被 16:9 裁切 */
+  .feed.poster .tile{aspect-ratio:2/3;max-width:680px;margin-left:auto;margin-right:auto}
+  .empty{padding:80px 0;text-align:center;color:var(--muted);font-size:14px;letter-spacing:.08em}
+
+
+  /* 上一件 / 下一件 */
+  .pager{border-top:1px solid var(--line-strong);margin-top:30px;display:grid;grid-template-columns:1fr 1fr}
+  .pager a{padding:34px 0;transition:padding .3s var(--ease)}
+  .pager .next{text-align:right}
+  .pager a:hover{padding-left:10px}
+  .pager .next:hover{padding-left:0;padding-right:10px}
+  .pager .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .pager .ttl{font-family:var(--serif);font-size:clamp(20px,2.6vw,30px);font-weight:700;margin-top:8px;letter-spacing:-.01em}
+  @media(max-width:620px){
+    .pager{grid-template-columns:1fr}
+    .pager .next{text-align:left;border-top:1px solid var(--line)}
+  }
+
+  footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:12px;letter-spacing:.04em;margin-top:40px}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="home.html">ONE WAVE LAB</a>
+    <a class="back" href="home.html">← 返回</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="feed" id="feed"></div>
+
+  <div class="pager">
+    <a class="prev" id="dPrev" href="#"><div class="lbl">← 上一件</div><div class="ttl" id="dPrevT"></div></a>
+    <a class="next" id="dNext" href="#"><div class="lbl">下一件 →</div><div class="ttl" id="dNextT"></div></a>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>© <span id="yr"></span> ONE WAVE LAB. 保留所有权利。</div>
+    <div>Designed with care ✦ 用 WorkBuddy 搭建</div>
+  </div>
+</footer>
+
+<script src="works.js"></script>
+<script>
+  const params=new URLSearchParams(location.search);
+  const id=params.get('id');
+  const w=getWork(id);
+  if(!w){ location.href='home.html'; }
+  else{
+    document.title=w.t+' — ONE WAVE LAB';
+    const feed=document.getElementById('feed');
+    const isPoster = w.cat==='poster';
+    if(isPoster) feed.classList.add('poster');
+
+    // 自然排序（01,02..09,10,11…）
+    const nat=(a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true,sensitivity:'base'});
+
+    async function loadFeed(){
+      let hero=null, rest=[];
+      // 优先：自动扫描 images/<id>/ 目录（需通过本地服务器预览，file:// 双击无效）
+      try{
+        const res=await fetch('images/'+w.id+'/');
+        if(res.ok){
+          const html=await res.text();
+          const links=[...html.matchAll(/href="([^"?#]+\.(?:jpe?g|png|webp|gif|avif|svg))/gi)]
+            .map(m=>decodeURIComponent(m[1]))
+            .filter(f=>!/^(cover|logo|readme|manifest)/i.test(f))
+            .sort(nat)
+            .map(f=>'images/'+w.id+'/'+f);
+          if(links.length){
+            hero = w.img && links.includes(w.img) ? w.img : (w.img || links[0]);
+            rest = links.filter(l=>l!==hero);
+          }
+        }
+      }catch(e){ /* 落到下面的 works.js 兜底 */ }
+
+      // 兜底：works.js 里的 gallery 字段
+      if(!hero && rest.length===0 && Array.isArray(w.gallery)){
+        const gal=w.gallery.map(it=>(it&&typeof it==='object')?it.src:it).filter(Boolean);
+        hero = w.img || gal[0] || null;
+        rest = w.img ? gal.slice() : gal.slice(1);
+      }
+
+      const tiles=[];
+      if(hero) tiles.push({src:hero,full:!isPoster});
+      rest.forEach(src=>tiles.push({src,full:false}));
+
+      if(tiles.length===0){
+        feed.innerHTML='<div class="tile full"><div class="empty">该案例图片即将上线</div></div>';
+        return;
+      }
+      tiles.forEach(it=>{
+        const d=document.createElement('div');
+        d.className='tile'+(it.full?' full':'');
+        d.innerHTML='<img src="'+it.src+'" alt="'+w.t+'" loading="lazy">';
+        feed.appendChild(d);
+      });
+    }
+    loadFeed();
+
+    const {prev,next}=getNeighbors(id);
+    const pe=document.getElementById('dPrev'), ne=document.getElementById('dNext');
+    pe.href='project.html?id='+prev.id; document.getElementById('dPrevT').textContent=prev.t;
+    ne.href='project.html?id='+next.id; document.getElementById('dNextT').textContent=next.t;
+  }
+  document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
